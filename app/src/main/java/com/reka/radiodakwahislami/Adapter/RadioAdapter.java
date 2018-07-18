@@ -15,8 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.reka.radiodakwahislami.Activity.PlayerActivity;
+import com.reka.radiodakwahislami.Fragment.RadioFragment;
 import com.reka.radiodakwahislami.R;
-import com.reka.radiodakwahislami.Service.StreamingService;
+
 
 import java.util.ArrayList;
 
@@ -57,7 +58,9 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioVH>{
             public void onClick(View v) {
                 Intent pindah = new Intent(context, PlayerActivity.class);
                 pindah.putExtra("URL", arrayListRadio.get(position));
+
                 context.startActivity(pindah);
+
 
             }
         });

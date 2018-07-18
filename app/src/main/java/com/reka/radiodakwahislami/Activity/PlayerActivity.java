@@ -2,6 +2,7 @@ package com.reka.radiodakwahislami.Activity;
 
 import android.app.ProgressDialog;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.reka.radiodakwahislami.Model.RadioModel;
 import com.reka.radiodakwahislami.R;
 import com.reka.radiodakwahislami.Rest.ApiServices;
@@ -25,7 +41,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PlayerActivity extends AppCompatActivity implements View.OnClickListener {
+public class PlayerActivity extends AppCompatActivity {
+
+
     //retrofit
     int currentlisteners;
     String serverTitle;
@@ -34,22 +52,36 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
 
     //radio
-    private ProgressBar playSeekBar;
-    private Button buttonPlay;
-    private Button buttonStopPlay;
-    private MediaPlayer player;
+    //deklarasi widget
+    private Button startButton;
+    private Button stopButton;
+
+    //
+    private SimpleExoPlayer player;
+    private BandwidthMeter bandwidthMeter;
+    private ExtractorsFactory extractorsFactory;
+    private TrackSelection.Factory trackSelectionFactory;
+    private TrackSelector trackSelector;
+    private DefaultBandwidthMeter defaultBandwidthMeter;
+    private DataSource.Factory dataSourceFactory;
+    private MediaSource mediaSource;
 
     /** Called when the activity is first created. */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-        initializeUIElements();
-        initializeMediaPlayer();
-        pendengar = findViewById(R.id.tvpendengar);
-        namaRadio = findViewById(R.id.tv_namaradio);
 
+        pendengar = (TextView) findViewById(R.id.tv_pendengar);
+        namaRadio = (TextView) findViewById(R.id.tv_namaradio);
+        //getdata
         ambilData();
+
+        startButton = (Button) findViewById(R.id.buttonPlay);
+        stopButton = (Button) findViewById(R.id.buttonStop);
+
+        callRadio();
+
     }
     //get data
     private void ambilData() {
@@ -61,6 +93,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
 
         String url = getIntent().getStringExtra("URL");
+
         Toast.makeText(this, "ini data" + url, Toast.LENGTH_SHORT).show();
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -79,10 +112,10 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onResponse(Call<RadioModel> call, Response<RadioModel> response) {
                 progressDialog.dismiss();
-                currentlisteners = response.body().getCurrentlisteners();
-                pendengar.setText("Pendengar :" + currentlisteners);
-                serverTitle = response.body().getServertitle();
-                namaRadio.setText("Nama Radio :" + serverTitle);
+                    currentlisteners = response.body().getCurrentlisteners();
+                    pendengar.setText("Pendengar :" +currentlisteners);
+                    serverTitle = response.body().getServertitle();
+                    namaRadio.setText("Nama Radio :" + serverTitle);
             }
 
             @Override
@@ -94,92 +127,68 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     //radio
-    private void initializeUIElements() {
+    private void callRadio(){
+        bandwidthMeter = new DefaultBandwidthMeter();
+        extractorsFactory = new DefaultExtractorsFactory();
 
-        playSeekBar = (ProgressBar) findViewById(R.id.progressBar1);
-        playSeekBar.setMax(100);
-        playSeekBar.setVisibility(View.INVISIBLE);
+        trackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
 
-        buttonPlay = (Button) findViewById(R.id.buttonPlay);
-        buttonPlay.setOnClickListener(this);
+        trackSelector = new DefaultTrackSelector(trackSelectionFactory);
 
-        buttonStopPlay = (Button) findViewById(R.id.buttonStopPlay);
-        buttonStopPlay.setEnabled(false);
-        buttonStopPlay.setOnClickListener(this);
+/*        dataSourceFactory = new DefaultDataSourceFactory(this,
+                Util.getUserAgent(this, "mediaPlayerSample"),
+                (TransferListener<? super DataSource>) bandwidthMeter);*/
 
-    }
+        defaultBandwidthMeter = new DefaultBandwidthMeter();
+        dataSourceFactory = new DefaultDataSourceFactory(this,
+                Util.getUserAgent(this, "mediaPlayerSample"), defaultBandwidthMeter);
 
-    public void onClick(View v) {
-        if (v == buttonPlay) {
-            startPlaying();
-        } else if (v == buttonStopPlay) {
-            stopPlaying();
-        }
-    }
+        String urlRadio = getIntent().getStringExtra("URL");
 
-    private void startPlaying() {
-        buttonStopPlay.setEnabled(true);
-        buttonPlay.setEnabled(false);
+        mediaSource = new ExtractorMediaSource(Uri.parse(urlRadio), dataSourceFactory, extractorsFactory, null, null);
 
-        playSeekBar.setVisibility(View.VISIBLE);
+        player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
 
-        player.prepareAsync();
 
-        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        player.prepare(mediaSource);
 
-            public void onPrepared(MediaPlayer mp) {
-                player.start();
-            }
-        });
+        play();
+        stop();
+
+
 
     }
 
-    private void stopPlaying() {
-        if (player.isPlaying()) {
-            player.stop();
-            player.release();
-            initializeMediaPlayer();
-        }
 
-        buttonPlay.setEnabled(true);
-        buttonStopPlay.setEnabled(false);
-        playSeekBar.setVisibility(View.INVISIBLE);
-    }
 
-    private void initializeMediaPlayer() {
-        player = new MediaPlayer();
+    private void play() {
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        try {
-            player.setDataSource(getIntent().getStringExtra("URL"));
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        player.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-
-            public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                playSeekBar.setSecondaryProgress(percent);
-                Log.i("Buffering", "" + percent);
+                player.setPlayWhenReady(true);
+                startButton.setEnabled(false);
+                stopButton.setEnabled(true);
             }
         });
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (player.isPlaying()) {
-//            player.stop();
-        }
+    private void stop() {
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                player.setPlayWhenReady(false);
+                startButton.setEnabled(true);
+                stopButton.setEnabled(false);
+            }
+        });
     }
+    //
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        player.setPlayWhenReady(false);
+//    }
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
 }
 
 
