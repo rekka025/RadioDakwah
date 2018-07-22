@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.reka.radiodakwahislami.Activity.PlayerActivity;
 import com.reka.radiodakwahislami.Fragment.RadioFragment;
 import com.reka.radiodakwahislami.R;
@@ -36,11 +37,15 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioVH>{
     Context context;
     private ArrayList<String> arrayList;
     private ArrayList<String> arrayListRadio;
+    private ArrayList<Integer> arrayListGambar;
+    private ArrayList<Integer> arrayListLogo;
 
-    public RadioAdapter(Context context, ArrayList<String> arrayList, ArrayList<String> arrayListRadio) {
+    public RadioAdapter(Context context, ArrayList<String> arrayList, ArrayList<String> arrayListRadio, ArrayList<Integer> arrayListGambar,ArrayList<Integer> arrayListLogo ){
         this.context = context;
         this.arrayList = arrayList;
         this.arrayListRadio = arrayListRadio;
+        this.arrayListGambar = arrayListGambar;
+        this.arrayListLogo = arrayListLogo;
     }
 
     @Override
@@ -53,15 +58,15 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioVH>{
     @Override
     public void onBindViewHolder(final RadioAdapter.RadioVH holder, final int position) {
         final String nama = arrayList.get(position);
+        holder.imgList.setImageResource(arrayListLogo.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent pindah = new Intent(context, PlayerActivity.class);
                 pindah.putExtra("URL", arrayListRadio.get(position));
-
+                pindah.putExtra("NAMA",arrayList.get(position));
+                pindah.putExtra("GAMBAR",arrayListGambar.get(position));
                 context.startActivity(pindah);
-
-
             }
         });
         holder.namaRadio.setText(nama);
@@ -75,9 +80,12 @@ public class RadioAdapter extends RecyclerView.Adapter<RadioAdapter.RadioVH>{
 
     public class RadioVH extends RecyclerView.ViewHolder {
         private TextView namaRadio;
+        private ImageView imgList;
         public RadioVH(View itemView) {
             super(itemView);
             namaRadio = itemView.findViewById(R.id.id_radio);
+            imgList = itemView.findViewById(R.id.listRadio);
+
 
         }
     }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,10 +27,19 @@ import com.reka.radiodakwahislami.R;
 public class InformasiActivity extends AppCompatActivity implements OnMapReadyCallback {
     MapView mapView;
     TextView tv_waputra, tv_waputri;
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_informasi);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+        //gambar
+        int gambar = getIntent().getIntExtra("GAMBAR",0);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.id_colap);
+        collapsingToolbarLayout.setBackgroundResource(gambar);
+        collapsingToolbarLayout.setTitle(getIntent().getStringExtra("Tittle"));
+
         //website
         TextView link = (TextView) findViewById(R.id.web);
         tv_waputra = (TextView) findViewById(R.id.putra);
@@ -43,8 +53,7 @@ public class InformasiActivity extends AppCompatActivity implements OnMapReadyCa
             tv_waputri.setVisibility(View.INVISIBLE);
         }
 
-        CollapsingToolbarLayout cb = (CollapsingToolbarLayout) findViewById(R.id.id_colap);
-        cb.setTitle(getIntent().getStringExtra("Tittle"));
+
 
         //get background
         link.setText(Html.fromHtml(getIntent().getStringExtra("link")));

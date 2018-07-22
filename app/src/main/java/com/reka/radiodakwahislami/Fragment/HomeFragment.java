@@ -9,6 +9,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.GridLayout;
 
 import com.reka.radiodakwahislami.Activity.InformasiActivity;
@@ -31,7 +32,9 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-//        ImageView imageView = (ImageView) view.findViewById(R.id.)
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+
         gridLayout = (GridLayout) view.findViewById(R.id.mainGrid);
 
         //set event
@@ -80,9 +83,11 @@ public class HomeFragment extends Fragment {
                     String subTitle = "Jl. Raya Manyaran-Gunungpati, Cepoko, Gn. Pati\n Kota Semarang, Jawa Tengah 50223";
                     String nPutra = "WhatApp :";
                     String waPutra = "+6285727290077";
+                    int gambar = R.drawable.gmasjidasiyah;
+
 
                     Intent intent = new Intent(getActivity(), InformasiActivity.class);
-
+                    intent.putExtra("GAMBAR",gambar);
                     intent.putExtra("NAMAPUTRA",nPutra);
                     intent.putExtra("link",linkText);
                     intent.putExtra("Lang",mapAisyah);
@@ -99,9 +104,11 @@ public class HomeFragment extends Fragment {
                     String subTitle = "Karangroto, Genuk\n Kota Semarang, Jawa Tengah 50117";
                     String nPutra = "WhatApp/SMS :";
                     String waPutra = "+6289625984276";
+                    int gambar = R.drawable.gtempatradiomutiaraquran;
+
 
                     Intent intent = new Intent(getActivity(), InformasiActivity.class);
-
+                    intent.putExtra("GAMBAR",gambar);
                     intent.putExtra("NAMAPUTRA",nPutra);
                     intent.putExtra("link",linkText);
                     intent.putExtra("Lang",mapMutiaraquran);
@@ -118,8 +125,11 @@ public class HomeFragment extends Fragment {
                     String subTitle = "Jl.Durenan Asri Meteseh, Mangunharjo, Tembalang\nKota Semarang, Jawa Tengah 50271";
                     String nPutra = "WhatApp : ";
                     String waPutra = "+6285727290077";
+                    int gambar = R.drawable.gmasjidmiah;
+
 
                     Intent intent = new Intent(getActivity(), InformasiActivity.class);
+                    intent.putExtra("GAMBAR",gambar);
                     intent.putExtra("NAMAPUTRA",nPutra);
                     intent.putExtra("link",linkText);
                     intent.putExtra("Lang",mapAhmadbinhambal);
@@ -139,8 +149,11 @@ public class HomeFragment extends Fragment {
                     String nPutri = "WhatApp Putri :";
                     String waPutra = "+81325888015";
                     String waPutri = "+81325914002";
+                    int gambar = R.drawable.gmasjidalbarokah;
+
 
                     Intent intent = new Intent(getActivity(), InformasiActivity.class);
+                    intent.putExtra("GAMBAR",gambar);
                     intent.putExtra("NAMAPUTRA",nPutra);
                     intent.putExtra("NAMAPUTRI",nPutri);
                     intent.putExtra("link",linkText);
