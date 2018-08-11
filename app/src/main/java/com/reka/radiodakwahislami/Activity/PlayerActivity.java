@@ -7,6 +7,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 
 import android.os.Environment;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 
@@ -60,7 +61,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class PlayerActivity extends AppCompatActivity {
 
-
+    boolean doubleBackToExitPressedOnce = false;
     //retrofit
     int currentlisteners;
     String serverTitle;
@@ -101,7 +102,7 @@ public class PlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
+        ambilData();
         status = (ImageView) findViewById(R.id.status);
         int imageBg;
         imageBg = getIntent().getIntExtra("GAMBAR",0);
@@ -246,6 +247,10 @@ public class PlayerActivity extends AppCompatActivity {
                 stopButton.setVisibility(View.GONE);
                 buttonStart.setVisibility(View.GONE);
                 buttonStop.setVisibility(View.GONE);
+                simpleChronometer.setVisibility(View.GONE);
+                ambilData();
+                stopRecord();
+
 
             }
         });
@@ -316,6 +321,9 @@ public class PlayerActivity extends AppCompatActivity {
 
                 simpleChronometer.setVisibility(View.VISIBLE);
                 simpleChronometer.start();
+
+
+
                 if(checkPermission()) {
 
                     AudioSavePathInDevice =
@@ -356,11 +364,13 @@ public class PlayerActivity extends AppCompatActivity {
                 simpleChronometer.setVisibility(View.GONE);
                 buttonStop.setVisibility(View.GONE);
                 buttonStart.setVisibility(View.VISIBLE);
-                Toast.makeText(PlayerActivity.this, "Recording Completed",
+                Toast.makeText(PlayerActivity.this, "Recording Completed" +AudioSavePathInDevice,
                         Toast.LENGTH_LONG).show();
             }
         });
     }
+
+
 
 
 
@@ -373,6 +383,27 @@ public class PlayerActivity extends AppCompatActivity {
         stopRecord();
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            stopRecord();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Tekan Lagi Untuk Kembali", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
+
 
 }
 

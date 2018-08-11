@@ -31,8 +31,8 @@ public class RadioFragment extends Fragment {
     private ArrayList<String> dataUrl;
     private String[] urlRadio = {"http://45.64.98.181:8104",
             "http://radio.majelis-albarokah.com:8040",
-            "http://103.28.148.99:9302",
-            "http://103.28.148.99:9302"};
+            "http://87.117.228.65:24537",
+            "http://78.129.234.163:11759"};
     private ArrayList<Integer> dataGambar;
     private int[] gambarStasiun = {R.drawable.gtempatradiomutiaraquran,R.drawable.gmasjidalbarokah,R.drawable.gmasjidasiyah,R.drawable.gmasjidmiah};
 

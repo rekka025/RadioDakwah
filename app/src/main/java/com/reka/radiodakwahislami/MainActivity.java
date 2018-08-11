@@ -2,12 +2,14 @@ package com.reka.radiodakwahislami;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.reka.radiodakwahislami.Fragment.HomeFragment;
 import com.reka.radiodakwahislami.Fragment.RadioFragment;
@@ -15,6 +17,7 @@ import com.reka.radiodakwahislami.Fragment.RadioFragment;
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
+    boolean doubleBackToExitPressedOnce = false;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -52,6 +55,24 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fl_fragment,new HomeFragment())
                 .commit();
 
+    }
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Tekan Lagi Untuk Keluar", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
 }
