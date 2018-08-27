@@ -81,8 +81,8 @@ public class HomeFragment extends Fragment {
                     String linkText = "<a href='http://yayasankhodijah.com/radioaisyah//'>Masjid Ummul Mu'minin Aisyah</a>";
                     String title = "Masjid Ummul Mu'minin Aisyah";
                     String subTitle = "Jl. Raya Manyaran-Gunungpati, Cepoko, Gn. Pati\n Kota Semarang, Jawa Tengah 50223";
-                    String nPutra = "WhatApp :";
-                    String waPutra = "+6285727290077";
+                    String nPutra = "WhatApp : ";
+                    String waPutra = "+6281290890305";
                     int gambar = R.drawable.gmasjidasiyah;
 
 
@@ -146,9 +146,9 @@ public class HomeFragment extends Fragment {
                     String linkText = "<a href='http://majelis-albarokah.com/'>Masjid Al-Barokah</a>";
                     String subTitle = "Jl. Tegalsari Raya No.41, Candi, Candisari\nKota Semarang, Jawa Tengah 50614";
                     String nPutra = "WhatApp Putra :";
-                    String nPutri = "WhatApp Putri :";
-                    String waPutra = "+81325888015";
-                    String waPutri = "+81325914002";
+                    String nPutri = "WhatApp Putri  :";
+                    String waPutra = "+6281325888015";
+                    String waPutri = "+6281325914002";
                     int gambar = R.drawable.gmasjidalbarokah;
 
 

@@ -21,20 +21,22 @@ public class RadioFragment extends Fragment {
 
     RecyclerView recyclerView;
     private ArrayList<Integer> dataList;
-    private int[] gambarList = {R.drawable.logo1,R.drawable.logo2,R.drawable.logo3,R.drawable.logo4};
+    private int[] gambarList = {R.drawable.logo1,R.drawable.logo2,R.drawable.logo3,R.drawable.logo4,R.drawable.logo5};
     private ArrayList<String> dataNama;
     private String[] namaRadio = {
             "Radio Mutiara Qur'an",
             "Radio Majelis Al-Barokah",
             "Radio Aiysah Ummul Mu'minin",
-            "Radio Ahmad Bin Hambal"};
+            "Radio Ahmad Bin Hambal",
+            "Sahabat Sunnah"};
     private ArrayList<String> dataUrl;
     private String[] urlRadio = {"http://45.64.98.181:8104",
             "http://radio.majelis-albarokah.com:8040",
-            "http://87.117.228.65:24537",
-            "http://78.129.234.163:11759"};
+            "http://radio.majelis-albarokah.com:8040",
+            "http://95.154.254.157:3422",
+            "http://95.154.254.157:17004"};
     private ArrayList<Integer> dataGambar;
-    private int[] gambarStasiun = {R.drawable.gtempatradiomutiaraquran,R.drawable.gmasjidalbarokah,R.drawable.gmasjidasiyah,R.drawable.gmasjidmiah};
+    private int[] gambarStasiun = {R.drawable.gtempatradiomutiaraquran,R.drawable.gmasjidalbarokah,R.drawable.gmasjidasiyah,R.drawable.gmasjidmiah,R.drawable.gss};
 
     public RadioFragment() {
         // Required empty public constructor

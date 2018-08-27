@@ -44,8 +44,10 @@ import com.reka.radiodakwahislami.Model.RadioModel;
 import com.reka.radiodakwahislami.R;
 import com.reka.radiodakwahislami.Rest.ApiServices;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import okhttp3.OkHttpClient;
@@ -179,6 +181,7 @@ public class PlayerActivity extends AppCompatActivity {
                         status.setImageResource(R.drawable.green);
                     }else {
                         status.setImageResource(R.drawable.red);
+                        Toast.makeText(PlayerActivity.this, "Radio Ini Offline", Toast.LENGTH_SHORT).show();
                     }
                     pendengar.setText("Pendengar : " +currentlisteners);
                     namaRadio.setText("Nama Radio : " + serverTitle);
@@ -315,20 +318,26 @@ public class PlayerActivity extends AppCompatActivity {
                 simpleChronometer.setBase(SystemClock.elapsedRealtime());
 
                 Calendar currentTime = Calendar.getInstance();
-                int day = currentTime.get(Calendar.DAY_OF_MONTH);
-                int month = currentTime.get(Calendar.MONTH);
-                int year = currentTime.get(Calendar.YEAR);
+//                int day = currentTime.get(Calendar.DAY_OF_MONTH);
+//                int month = currentTime.get(Calendar.MONTH);
+//                int year = currentTime.get(Calendar.YEAR);
+                Date time = currentTime.getTime();
 
-                simpleChronometer.setVisibility(View.VISIBLE);
-                simpleChronometer.start();
 
+                String sep = File.separator; // Use this instead of hardcoding the "/"
+                String newFolder = "Radio Records";
+                String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+                File myNewFolder = new File(extStorageDirectory + sep + newFolder);
+                myNewFolder.mkdir();
 
 
                 if(checkPermission()) {
+                    simpleChronometer.setVisibility(View.VISIBLE);
+                    simpleChronometer.start();
 
                     AudioSavePathInDevice =
-                            Environment.getExternalStorageDirectory().getAbsolutePath() + "/" +"("
-                                    +day+"-"+month+"-"+year+")"+"  "+"RadioRecording.mp3" ;
+                            Environment.getExternalStorageDirectory().getAbsolutePath() + sep +newFolder +sep +
+                                    serverTitle+" ("+time+")"+"  "  +".mp3" ;
 
                     MediaRecorderReady();
 

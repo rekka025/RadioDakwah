@@ -113,22 +113,28 @@ public class InformasiActivity extends AppCompatActivity implements OnMapReadyCa
     public void putra(View view) {
         String putrawa = getIntent().getStringExtra("WAPUTRA");
         try {
-            Intent sendIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + "" + putrawa + "?body=" + ""));
-            sendIntent.setPackage("com.whatsapp");
-            startActivity(sendIntent);
-        } catch (Exception e) {
+            String toNumber = putrawa; // Replace with mobile phone number without +Sign or leading zeros.
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+toNumber));
+            startActivity(intent);
+        }
+        catch (Exception e){
             e.printStackTrace();
             Toast.makeText(InformasiActivity.this, "Silahkan Install Aplikasi WhatApp Terlebih Dahulu", Toast.LENGTH_LONG).show();
-
         }
+
     }
     public void putri(View view) {
         String putriwa = getIntent().getStringExtra("WAPUTRI");
         try {
-            Intent sendIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + "" + putriwa + "?body=" + ""));
-            sendIntent.setPackage("com.whatsapp");
-            startActivity(sendIntent);
-        } catch (Exception e) {
+            String toNumber = putriwa; // Replace with mobile phone number without +Sign or leading zeros.
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+toNumber));
+            startActivity(intent);
+        }
+        catch (Exception e){
             e.printStackTrace();
             Toast.makeText(InformasiActivity.this, "Silahkan Install Aplikasi WhatApp Terlebih Dahulu", Toast.LENGTH_LONG).show();
         }
